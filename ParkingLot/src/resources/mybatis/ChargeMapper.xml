@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.mybatis.persistence.ChargeMapper">
+
+	<update id="createParkingTable">
+		CREATE TABLE IF NOT EXISTS ACCOUNTS
+		(
+		<!-- Number INT(11) NOT NULL AUTO_INCREMENT,
+		CarType CHAR(15) NOT NULL,
+		CarNumber CHAR(30) NOT NULL,
+		Pay INT NOT NULL,
+		CarOutTime DATE NOT NULL,
+		PRIMARY KEY(Number) -->
+		Number INT(11) NOT NULL AUTO_INCREMENT,
+		CarType CHAR(15),
+		CarNumber CHAR(30),
+		Pay INT,
+		CarOutTime CHAR(30),
+		PRIMARY KEY(Number)
+		)
+	</update>
+	
+	<insert id="insert" parameterType="car">
+		INSERT INTO ACCOUNTS (CarType, CarNumber, Pay, CarOutTime)
+		VALUES(#{carType}, #{carNumber}, #{Pay}, #{carOutTime})
+	</insert>
+	
+	<update id="dropTable">
+		DROP TABLE ACCOUNTS
+	</update>
+	
+	<select id="allSelect" resultType="car">
+		SELECT * FROM ACCOUNTS
+	</select>
+	
+	<select id="typeSelect" parameterType="car" resultType="car">
+		SELECT CarType, CarNumber, Pay, CarOutTime FROM ACCOUNTS
+		WHERE CarType = #{carType}
+	</select>
+	
+	<select id="numberSelect" parameterType="car" resultType="car">
+		SELECT CarType, CarNumber, Pay, CarOutTime FROM ACCOUNTS
+		WHERE CarNumber LIKE #{carNumber}
+	</select>
+	
+</mapper>
