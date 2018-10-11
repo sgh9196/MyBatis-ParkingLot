@@ -33,7 +33,7 @@
 	</update>
 	
 	<select id="allSelect" resultType="car">
-		SELECT * FROM ACCOUNTS
+		SELECT * FROM ACCOUNTS ORDER BY CarOutTime desc
 	</select>
 	
 	<select id="typeSelect" parameterType="car" resultType="car">

@@ -1,3 +1,4 @@
+package default_pack;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
@@ -55,7 +56,7 @@ public class ParkingLot {
 	}
 
 	/* 입차 */
-	public boolean updateCarIn(Node head, int parking, String carType) {
+	public boolean updateCarIn(Node layer, Node head, int parking, String carType) {
 
 		Node p = null;
 
@@ -64,29 +65,36 @@ public class ParkingLot {
 		int mod = parking % 10;
 		int value = (int) (parking * 0.1);
 
-		p = head;
-		p = overLapCheck(head, mod);
-
+		p = layer;
+		p = overLapCheck(p, mod);
+		
+		System.out.println("1. 확정   2. 취소\n>> ");
+		
 		if ((p.getNumber() == parking) && (p.getCarInfo().getCarNumber() == null)) {
+			
+			Car car = new Car();
 
-			System.out.println("1. 확정   2. 취소\n>> ");
+			car.setCarRandNumber();
+			
+			//System.out.println(car.getCarNumber());
+			LinkedList linked = new LinkedList();
+			
+			if(linked.carNumberSearch(head, car.getCarNumber())) {
+				System.out.println("차량 번호 중복");
+				return false;
+			}
+			car.setCarType(carType);
+			car.setCarInTime(nowTime());
+			car.setPay(defaultPrice(carType));
+			car.setParkingNumber(parking);
+
+			//System.out.println("1. 확정   2. 취소\n>> ");
 
 			if (sc.nextInt() == 1) {
-
-				Car car = new Car();
-
-				car.setCarRandNumber();
-				car.setCarType(carType);
-				car.setCarInTime(nowTime());
-				System.out.println(car.getCarInTime());
-				car.setPay(defaultPrice(carType));
-				car.setParkingNumber(parking);
-
 				p.setCarInfo(car);
-
 				tmp = true;
-
 			} else {
+				System.out.println("자리없다");
 				tmp = false;
 			}
 

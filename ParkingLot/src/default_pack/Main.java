@@ -1,3 +1,4 @@
+package default_pack;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -69,6 +70,9 @@ public class Main {
 
 	}
 
+	// 몇번 차량 몇층 프런트로 이동합니다.
+	// 몇번 차량 몇층 프런트로 출차합니다.
+	
 	/* 입차 Menu */
 	public static void carIn() {
 
@@ -76,29 +80,35 @@ public class Main {
 		String carType = "";
 		boolean overLap = false;
 
+		
+		System.out.print("1. 소형   2. 중형   3. 승합\n>> ");
+		int slt = sc.nextInt();
+		
 		while (!overLap) {
 
-			System.out.print("1. 소형   2. 중형   3. 승합\n>> ");
+			//System.out.print("1. 소형   2. 중형   3. 승합\n>> ");
 
-			switch (sc.nextInt()) {
-			case 1:
-				parking = rand(20);
-				carType = "소형";
-				break;
-			case 2:
-				parking = rand(20) + 20;
-				carType = "중형";
-				break;
-			case 3:
-				parking = rand(10) + 40;
-				carType = "승합";
-				break;
+			switch (slt) {
+				case 1:
+					parking = rand(20);
+					carType = "소형";
+					break;
+				case 2:
+					parking = rand(20) + 20;
+					carType = "중형";
+					break;
+				case 3:
+					parking = rand(10) + 40;
+					carType = "승합";
+					break;
+				default:
+					return;
 			}
 
 			int index = (int) (parking * 0.1);
 
-			overLap = (parking % 10 >= 5) ? parkingLot.updateCarIn(rear[index], parking, carType)
-					: parkingLot.updateCarIn(front[index], parking, carType);
+			overLap = (parking % 10 >= 5) ? parkingLot.updateCarIn(rear[index], head, parking, carType)
+					: parkingLot.updateCarIn(front[index], head, parking, carType);
 
 		}
 

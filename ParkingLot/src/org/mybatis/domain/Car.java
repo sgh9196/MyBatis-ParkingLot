@@ -2,6 +2,8 @@ package org.mybatis.domain;
 
 import java.util.Random;
 
+import default_pack.LinkedList;
+
 public class Car {
 
 	private String carNumber;
@@ -22,13 +24,9 @@ public class Car {
 		this.carNumber += midArray[rd.nextInt(midArray.length - 1)];
 		this.carNumber += String.valueOf(rd.nextInt(9000) + 1000);
 		
-		
-		
 		if(this.carNumber.length()==6) {
 			this.carNumber = "0" + carNumber;
 		}
-		
-		
 		
 	}
 

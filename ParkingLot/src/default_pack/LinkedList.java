@@ -1,3 +1,4 @@
+package default_pack;
 import org.mybatis.domain.Car;
 import org.mybatis.domain.Node;
 
@@ -48,6 +49,30 @@ public class LinkedList {
 
 	}
 	
+	public boolean carNumberSearch(Node head, String carNumber) {
+		
+		boolean tmp = false;
+		
+		Node p = head;
+		
+		do {
+			
+			p = p.getR_Link();
+			
+			if(p.getCarInfo()!=null) {
+				
+				String num = p.getCarInfo().getCarNumber();
+				
+				if(num!=null && num.equals(carNumber)) {
+					tmp = true;
+				}
+			}
+			
+		} while(p.getR_Link()!=head.getR_Link());
+		
+		return tmp;
+		
+	}
 	
 	/* 이중 큐 검색 */
 	public Node searchNode(Node head, String carNumber) {
@@ -140,6 +165,7 @@ public class LinkedList {
 
 		System.out.println("GoTo Front Index ... ");
 		/* parking 자리 까지 이동 (Right) */
+		System.out.println(p.getNumber());
 		for (int i = 0; i <= mod; i++) {
 			p = p.getR_Link();
 			// System.out.print(p.getNumber() + " ");
