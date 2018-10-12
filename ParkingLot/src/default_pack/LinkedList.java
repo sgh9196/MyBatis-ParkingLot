@@ -159,13 +159,12 @@ public class LinkedList {
 		return p;
 
 	}
-
+	
 	/* rear에서 이동 */
 	public Node rearMove(Node p, int mod) {
 
 		System.out.println("GoTo Front Index ... ");
 		/* parking 자리 까지 이동 (Right) */
-		System.out.println(p.getNumber());
 		for (int i = 0; i <= mod; i++) {
 			p = p.getR_Link();
 			// System.out.print(p.getNumber() + " ");

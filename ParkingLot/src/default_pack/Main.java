@@ -16,6 +16,8 @@ public class Main {
 
 	private static ParkingLot parkingLot;
 
+	private static String[] carType = { "소형", "중형", "승합" };
+	
 	public static void mybatisSet() {
 
 		try {
@@ -61,66 +63,41 @@ public class Main {
 
 	}
 
-	/* 랜덤 주차장 자리 찾기 */
-	public static int rand(int value) {
-
-		Random rd = new Random();
-
-		return rd.nextInt(value);
-
-	}
-
 	// 몇번 차량 몇층 프런트로 이동합니다.
 	// 몇번 차량 몇층 프런트로 출차합니다.
 	
 	/* 입차 Menu */
-	public static void carIn() {
-
-		int parking = 0;
-		String carType = "";
-		boolean overLap = false;
-
+	public static boolean carIn() {
+		
+		
+		int num = 0;
+		String type = "";
+		boolean tmp = false;
 		
 		System.out.print("1. 소형   2. 중형   3. 승합\n>> ");
-		int slt = sc.nextInt();
+		num = sc.nextInt();
 		
-		while (!overLap) {
-
-			//System.out.print("1. 소형   2. 중형   3. 승합\n>> ");
-
-			switch (slt) {
-				case 1:
-					parking = rand(20);
-					carType = "소형";
-					break;
-				case 2:
-					parking = rand(20) + 20;
-					carType = "중형";
-					break;
-				case 3:
-					parking = rand(10) + 40;
-					carType = "승합";
-					break;
-				default:
-					return;
+		if(num<=3) {
+			type = carType[num-1];
+			boolean parkingTmp = parkingLot.updateCarIn(type, rear, front, head);
+			
+			if(parkingTmp) {
+				tmp = true;
 			}
-
-			int index = (int) (parking * 0.1);
-
-			overLap = (parking % 10 >= 5) ? parkingLot.updateCarIn(rear[index], head, parking, carType)
-					: parkingLot.updateCarIn(front[index], head, parking, carType);
-
 		}
-
+		else {
+			System.out.println("존재하지 않은 차량 종류입니다.");
+		}
+		
+		return tmp;
+		
 	}
 
 	public static String typeCalculate() {
 		
-		String[] type = { "소형", "중형", "승합" };
-		
 		System.out.print("1. 소형   2. 중형   3. 승합\n>> ");
 		
-		return type[sc.nextInt()-1];
+		return carType[sc.nextInt()-1];
 		
 	}
 	
@@ -173,18 +150,18 @@ public class Main {
 			System.out.print("1. 입차   2. 출차   3. 정산   4. 종료\n>> ");
 
 			switch (sc.nextInt()) {
-			case 1:
-				carIn();
-				break;
-			case 2:
-				parkingLot.updateOutCar(head);
-				break;
-			case 3:
-				Calculate();
-				break;
-			case 4:
-				systemExit();
-				break;
+				case 1:
+					carIn();
+					break;
+				case 2:
+					parkingLot.updateOutCar(head);
+					break;
+				case 3:
+					Calculate();
+					break;
+				case 4:
+					systemExit();
+					break;
 			}
 
 		}

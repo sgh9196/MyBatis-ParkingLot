@@ -1,6 +1,7 @@
 package default_pack;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 import java.util.Scanner;
 
 import org.mybatis.domain.Car;
@@ -54,56 +55,88 @@ public class ParkingLot {
 		return p;
 
 	}
+	
+	/* 랜덤 주차장 자리 찾기 */
+	public static int rand(String carType, int parking) {
 
-	/* 입차 */
-	public boolean updateCarIn(Node layer, Node head, int parking, String carType) {
+		Random rd = new Random();
 
-		Node p = null;
-
-		boolean tmp = false;
-
-		int mod = parking % 10;
-		int value = (int) (parking * 0.1);
-
-		p = layer;
-		p = overLapCheck(p, mod);
-		
-		System.out.println("1. 확정   2. 취소\n>> ");
-		
-		if ((p.getNumber() == parking) && (p.getCarInfo().getCarNumber() == null)) {
-			
-			Car car = new Car();
-
-			car.setCarRandNumber();
-			
-			//System.out.println(car.getCarNumber());
-			LinkedList linked = new LinkedList();
-			
-			if(linked.carNumberSearch(head, car.getCarNumber())) {
-				System.out.println("차량 번호 중복");
-				return false;
-			}
-			car.setCarType(carType);
-			car.setCarInTime(nowTime());
-			car.setPay(defaultPrice(carType));
-			car.setParkingNumber(parking);
-
-			//System.out.println("1. 확정   2. 취소\n>> ");
-
-			if (sc.nextInt() == 1) {
-				p.setCarInfo(car);
-				tmp = true;
-			} else {
-				System.out.println("자리없다");
-				tmp = false;
-			}
-
+		switch(carType) {
+			case "소형":
+				parking = rd.nextInt(20);
+				break;
+			case "중형":
+				parking = rd.nextInt(20) + 20;
+				break;
+			case "승합":
+				parking = rd.nextInt(10) + 40;
+				break;
 		}
-
-		return tmp;
+		
+		return parking;
 
 	}
 
+	public boolean updateCarIn(String carType, Node[] rear, Node[] front, Node head) {
+		
+		int parking = 0;
+		
+		parking = rand(carType, parking);
+		
+		Node p = null;
+		int mod = parking % 10;
+		int value = (int) (parking * 0.1);
+		
+		while(true) {
+			
+			p = (mod >= 5) ? rear[value] : front[value];
+			p = overLapCheck(p, mod);
+			
+			if(p.getNumber()==parking) {
+				
+				Car car = new Car();
+				
+				car.setCarRandNumber();
+				
+				if (new LinkedList().carNumberSearch(head, car.getCarNumber())) {
+					System.out.println("차량 번호 중복");
+					return false;
+				}
+				else {
+					car.setCarType(carType);
+					car.setCarInTime(nowTime());
+					car.setPay(defaultPrice(carType));
+					car.setParkingNumber(parking);
+				}
+				
+				if(p.getCarInfo().getCarNumber()==null) {
+					
+					System.out.println("[" + car.getCarNumber() + "]차량 " + "[" + (4-value+1) + "]층 [" + (mod+1) + "]번째 자리");
+					System.out.println("1. 확정   2. 취소\n>> ");
+					
+					if(sc.nextInt()==1) {
+						p.setCarInfo(car);
+						return true;
+					}
+					else {
+						System.out.println("취소");
+						return false;
+					}
+					
+					
+					
+				}
+				else {
+					parking = rand(carType, parking);
+					mod = parking % 10;
+					value = (int) (parking * 0.1);
+					System.out.println("중복이므로 다시 랜덤을 돌립니다.");
+				}
+			}
+		}
+		
+	}
+	
 	/* 출차 */
 	public void updateOutCar(Node head) {
 
@@ -141,7 +174,18 @@ public class ParkingLot {
 
 			// System.out.println(Integer.parseInt(car.getCarInTime().substring(3, 5)) -
 			// Integer.parseInt(car.getCarOutTime().substring(3, 5)));
-
+			
+			int parking = p.getNumber();
+			
+			int mod = parking % 10;
+			int value = (int) (parking * 0.1);
+			
+			String layer = "";
+			
+			layer = (mod<=4) ? "front" : "rear";
+			
+			System.out.println("[" + p.getCarInfo().getCarNumber() + "]차량 " + "[" + (4-value+1) + "]층 [" + layer + "]로 출차");
+			
 			p.setCarInfo(new Car());
 
 			System.out.println("출차 완료!");
@@ -185,7 +229,7 @@ public class ParkingLot {
 			System.out.println("typeCalculate Err >> " + e.getMessage());
 		}
 		
-	}
+}
 	
 	public void numberCalculate() {
 		
